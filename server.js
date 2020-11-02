@@ -1,28 +1,32 @@
-const express = require('express')
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
 const app = express();
-const hbs = require('hbs');
-require('./hbs/helpers');
-const port = process.env.PORT || 3000;
+const bodyParser = require('body-parser')
 
-app.use(express.static(__dirname + '/public'));
+require('./config/config');
 
-//Express HBS
-hbs.registerPartials(__dirname + '/views/parciales', function(err) {});
-app.set('view engine', 'hbs');
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+//Habilitar carpeta public
+app.use(express.static(path.resolve(__dirname, '../public')));
 
 
+//Configuracion global de rutas
+app.use(require('./routes/index'));
 
-app.get('/', (req, res) => {
-
-    res.render('home', {
-        nombre: 'ramón'
-    });
+//Configuracion de la base de datos
+mongoose.connect(process.env.URLDB, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err, res) => {
+    if (err) throw err;
+    console.log("Base de datos ONLINE");
 });
 
-app.get('/about', (req, res) => {
-    res.render('about');
-});
-
-app.listen(port, () => {
-    console.log(`Escuchando peticiones en puerto ${port} `);
+app.listen(process.env.PORT, () => {
+    console.log("Escuchando en el puerto: ", process.env.PORT);
 })
+
+//mongodb+srv://ramon:bG5xvxjbE0k1xmrH@cluster0.iwh16.mongodb.net/test
