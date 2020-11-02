@@ -32,3 +32,8 @@ if (process.env.NODE_ENV === 'dev') {
     urlDB = 'mongodb+srv://ramon:bG5xvxjbE0k1xmrH@cluster0.iwh16.mongodb.net/cafe'
 }
 process.env.URLDB = urlDB;
+
+//================
+//Googel client ID
+//================
+process.env.CLIENT_ID = process.env.CLIENT_ID || '536344775279-nccchb32jluq7mudlgj97phnjrv30jsa.apps.googleusercontent.com';
